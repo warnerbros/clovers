@@ -1,0 +1,69 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# clovers
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The clovers package implements Fader and Hardie's Shifted Beta Geometric model for LTV in a discrete-time, contractual business.
+
+## Installation
+
+Once this package is available on CRAN, it can be installed as follows:
+
+``` {r, eval=FALSE}
+install.packages("clovers")
+```
+
+## Example
+
+This is a basic example:
+
+```{r example}
+library(clovers)
+```
+
+The package comes with simulated customer-level data:
+```{r}
+data(customer_lifetimes)
+head(customer_lifetimes)
+```
+
+Aggregate the customer-level data to the format required by the fitting function:
+```{r}
+agg_data = transform_individual(customer_lifetimes)
+print(agg_data)
+```
+
+Fit the model to the aggregated data and print the resulting fit parameters:
+```{r}
+fit = fit_sbg(agg_data)
+print(fit)
+```
+
+Display the modeled mean lifetime:
+```{r}
+lifetime_stats(fit)
+```
+
+Plot the modeled distribution of churn rates:
+```{r churn_distribution}
+plot_churn_distribution(fit, type="count")$plot
+```
+
+Draw a plot comparing the modeled survival function to an empirical survival function computed with the Kaplan-Meier estimator:
+```{r model_fit}
+plot_model_fit(fit, agg_data)$plot
+```

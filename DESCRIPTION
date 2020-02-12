@@ -1,0 +1,27 @@
+Package: clovers
+Title: Probabilistic Models of Customer Lifetime Value (LTV)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Williams",
+           family = "Jon",
+           role = c("aut", "cre"),
+           email = "jon.williams@warnerbros.com")
+Description: Analyze customer retention and lifetime value (LTV)
+    for contractual, discrete-time businesses using Fader and
+    Hardie's Shifted Beta-Geometric (sBG) probability model. See
+    Fader (2000) <doi:10.1002/dir.20074>. The package provides functions
+    for data preparation, parameter estimation, model checking,
+    LTV estimation, and plotting.
+License: Apache 2.0
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat (>= 2.1.0)
+RoxygenNote: 7.0.2
+Depends: 
+    R (>= 3.4.0)
+Imports: 
+    stats,
+    survival (>= 2.43-1),
+    scales (>= 1.0.0),
+    ggplot2 (>= 2.2.1)
