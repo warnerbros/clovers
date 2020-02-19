@@ -12,6 +12,13 @@ model for LTV in a discrete-time, contractual business.
 
 ## Installation
 
+The clovers package can be installed from GitHub as follows:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("warnerbros/clovers")
+```
+
 Once this package is available on CRAN, it can be installed as follows:
 
 ``` r
