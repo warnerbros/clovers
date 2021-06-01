@@ -38,3 +38,41 @@ lifetime_stats = function(fit, horizon=36){
   return(list(mean_lifetime = meant,
               sd_lifetime = sdt))
 }
+
+# Compute mean and SD lifetime with manually-tweaked churn rate
+# Given a churn-rate distribution with parameters in the object "fit",
+# sample individual churn rates. Then apply the adjustment to each
+# of the sampled churn rates. Finally, sample an actual lifetime
+# for each individual.
+lifetime_stats_adj = function(fit, horizon=36,
+                              p_reduction=0, p_knot = 0.05,
+                              p_mult = NULL, nsamps=1e5, random_seed=1){
+  a = fit$a
+  b = fit$b
+
+  # Sample churn rates for nsamps individuals
+  set.seed(random_seed)
+  p_samp_floor = 1e-5
+  psamps = rbeta(nsamps, a, b)
+
+  # Modify churn rates
+  if(is.null(p_mult)){
+    if(p_reduction > p_knot) stop("p_reduction must be less than or equal to p_knot")
+    psamps_reduced = ifelse(psamps >= p_knot,
+                            psamps - p_reduction,
+                            pmax((p_knot-p_reduction)*psamps/p_knot, p_samp_floor))
+  } else {
+    psamps_reduced = p_mult*psamps
+  }
+
+  # Sample actual lifetimes using modified churn rates
+  ysamps = rgeom(nsamps, prob=psamps_reduced) + 1
+
+  # Limit time range to horizon
+  ysamps_cutoff = ysamps
+  ysamps_cutoff[ysamps_cutoff > horizon] = horizon
+  return(list(mean_lifetime = mean(ysamps_cutoff, na.rm=TRUE),
+              sd_lifetime = sd(ysamps_cutoff, na.rm=TRUE)
+              )
+         )
+}
